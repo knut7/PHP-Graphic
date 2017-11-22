@@ -18,6 +18,9 @@
 namespace K7Graphic\Base;
 
 
+use K7Graphic\Factory\BarGraphic;
+use K7Graphic\Factory\GraphicFactory;
+
 class K7Graphic
 {
 
@@ -33,10 +36,44 @@ class K7Graphic
         $this->graphValues;
     }
 
+
+    /**
+     * @return mixed
+     */
+    public function getImgHeight()
+    {
+        return $this->imgHeight;
+    }
+
+    /**
+     * @param mixed $imgHeight
+     */
+    public function setImgHeight($imgHeight)
+    {
+        $this->imgHeight = $imgHeight;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImgWidth()
+    {
+        return $this->imgWidth;
+    }
+
+    /**
+     * @param mixed $imgWidth
+     */
+    public function setImgWidth($imgWidth)
+    {
+        $this->imgWidth = $imgWidth;
+    }
+
+
     public function create($filename, $with, $height)
     {
-        $this->imgWidth = $with;
-        $this->imgHeight = $height;
+        $this->setImgWidth($with);
+        $this->setImgHeight($height);
         $this->filename = $filename;
         $this->addValue();
 
@@ -45,7 +82,7 @@ class K7Graphic
     public function addValue()
     {
 
-        $image = imagecreate($this->imgWidth, $this->imgHeight);
+        $image = imagecreate($this->getImgWidth(), $this->getImgHeight());
         $colorWhite = imagecolorallocate($image, 255, 255, 255);
         $colorGrey = imagecolorallocate($image, 192, 192, 192);
         $colorBlue = imagecolorallocate($image, 0, 0, 255);
@@ -59,28 +96,11 @@ class K7Graphic
             imageline($image, $i * 25, 0, $i * 25, 250, $colorGrey);
             imageline($image, 0, $i * 25, 250, $i * 25, $colorGrey);
         }
-        $this->graphicLine($image, $colorBlue);
-        $this->graphicBar($image, $colorBlue);
+
+        $bar = new GraphicFactory( );
+        $bar->create( new BarGraphic($this->getImgWidth(), $this->getImgHeight(), $image, $colorBlue));
         $this->output($image);
     }
-
-    private function graphicLine($image, $colorBlue)
-    {
-        for ($i = 0; $i < 10; $i++) {
-            $d = rand(0, 100);
-            imageline($image, $i * $d, (250 - $this->graphValues[$i]), ($i + $d) * 25, (250 - $this->graphValues[$i + 1]), $colorBlue);
-        }
-    }
-
-    private function graphicBar($image, $colorBlue)
-    {
-        for ($i = 0; $i < 10; $i++) {
-
-            imagefilledrectangle($image, $i*25, (250-$this->graphValues[$i]), ($i+1)*25, 250, $colorBlue);
-            imagefilledrectangle($image, ($i*25)+1, (250-$this->graphValues[$i])+1, (($i+1)*25)-5, 248, $colorBlue);
-        }
-    }
-
 
 
     private function output($image)
