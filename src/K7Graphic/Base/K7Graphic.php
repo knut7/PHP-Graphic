@@ -15,7 +15,7 @@
  */
 
 
-namespace K7Graphic\Graphic;
+namespace K7Graphic\Base;
 
 
 class K7Graphic
