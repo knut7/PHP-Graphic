@@ -1,0 +1,34 @@
+{
+    "name": "knut7/php-graphic",
+    "type": "library",
+    "description": "This is a package to create dynamic graphics in php. Simple and easy to use.",
+    "keywords": [
+        "graphics",
+        "mvc", "graphic", "image"
+    ],
+    "homepage": "https://github.com/zebedeu",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marcio Zebede",
+            "email": "marciozebedeu@gmail.com",
+            "homepage": "http://artphoweb.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.0.0",
+
+    },
+     "autoload": {
+        "psr-4": {
+            "K7Graphic\\": "src/K7Graphic/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "K7Graphic\\Tests\\": "tests/"
+        }
+    }
+}
+
