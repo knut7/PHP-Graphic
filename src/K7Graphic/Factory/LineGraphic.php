@@ -52,8 +52,7 @@ class LineGraphic implements GraphicInterface
     public function graphicLine()
     {
         for ($i = 0; $i < 10; $i++) {
-            $d = rand(0, 100);
-            imageline($this->image, $i * $d, ($this->getImgWidth() - $this->graphValues[$i]), ($i + $d) * 25, ($this->getImgHeight() - $this->graphValues[$i + 1]), $this->colorBlue);
+            imageline($this->image, $i * 25, ($this->getImgWidth() - $this->graphValues[$i]), ($i + 1) * 25, ($this->getImgHeight() - $this->graphValues[$i + 1]), $this->colorBlue);
         }
     }
 }
