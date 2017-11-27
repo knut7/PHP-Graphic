@@ -20,6 +20,7 @@ namespace K7Graphic\Base;
 
 use K7Graphic\Factory\BarGraphic;
 use K7Graphic\Factory\GraphicFactory;
+use K7Graphic\Factory\LineGraphic;
 
 class K7Graphic
 {
@@ -75,11 +76,12 @@ class K7Graphic
         $this->setImgWidth($with);
         $this->setImgHeight($height);
         $this->filename = $filename;
-        $this->addValue();
+
+        return $this;
 
     }
 
-    public function addValue()
+    public function addValue($type)
     {
 
         $image = imagecreate($this->getImgWidth(), $this->getImgHeight());
@@ -92,15 +94,28 @@ class K7Graphic
         imageline($image, 249, 0, 249, 249, $colorGrey);
         imageline($image, 0, 249, 249, 249, $colorGrey);
 
+
         for ($i = 1; $i < 11; $i++) {
             imageline($image, $i * 25, 0, $i * 25, 250, $colorGrey);
             imageline($image, 0, $i * 25, 250, $i * 25, $colorGrey);
         }
 
-        $bar = new GraphicFactory( );
-        $bar->create( new BarGraphic($this->getImgWidth(), $this->getImgHeight(), $image, $colorBlue));
-        $this->output($image);
+        if("line" == $type) {
+            $bar = new GraphicFactory( );
+            $bar->create( new LineGraphic($this->getImgWidth(), $this->getImgHeight(), $image, $colorBlue));
+            $this->output($image);
+        }
+        if("bar" == $type) {
+            $bar = new GraphicFactory( );
+            $bar->create( new BarGraphic($this->getImgWidth(), $this->getImgHeight(), $image, $colorBlue));
+            $this->output($image);
+        }
+
+        return $this;
     }
+
+
+
 
 
     private function output($image)
