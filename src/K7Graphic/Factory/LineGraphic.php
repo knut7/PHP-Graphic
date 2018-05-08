@@ -14,7 +14,7 @@ class LineGraphic implements GraphicInterface
 
     private $imgHeight;
     private $imgWidth;
-    private $graphValues = array(0, 80, 23, 11, 190, 245, 50, 80, 111, 240, 55);
+    private $graphValues;
     /**
      * @var
      */
@@ -23,14 +23,17 @@ class LineGraphic implements GraphicInterface
      * @var
      */
     private $colorBlue;
+    private $textColor;
 
-    public function __construct($imgWidth, $imgHeight, $image, $colorBlue)
+    public function __construct($graphValues, $imgWidth, $imgHeight, $image, $colorBlue, $textColor)
     {
 
         $this->imgWidth = $imgWidth;
         $this->imgHeight = $imgHeight;
         $this->image = $image;
         $this->colorBlue = $colorBlue;
+        $this->textColor = $textColor;
+        $this->graphValues = $graphValues;
     }
     /**
      * @return mixed
@@ -48,11 +51,19 @@ class LineGraphic implements GraphicInterface
         return $this->imgWidth;
     }
 
-
     public function graphicLine()
     {
-        for ($i = 0; $i < 10; $i++) {
-            imageline($this->image, $i * 25, ($this->getImgWidth() - $this->graphValues[$i]), ($i + 1) * 25, ($this->getImgHeight() - $this->graphValues[$i + 1]), $this->colorBlue);
+
+        for ($i = 0; $i < count($this->graphValues); $i++) {
+            if(!empty($this->graphValues[$i])) {
+            @imageline($this->image, $i * 25, (250 - $this->graphValues[$i]), ($i + 1) * 25, (250 - $this->graphValues[$i+1]), $this->colorBlue);
+        }
+    }
+           foreach ($this->graphValues as $key => $value) {
+
+            imagettftext($this->image, 7, 1,  ($key*25)+1, (250-$this->graphValues[$key])+1, $this->textColor, 'Public/fonts/Arial.ttf', "$value %");
+
+           
         }
     }
 }

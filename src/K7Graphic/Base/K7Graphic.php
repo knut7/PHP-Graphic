@@ -18,9 +18,12 @@
 namespace K7Graphic\Base;
 
 
+use Ballybran\Exception\ClassNotFoundException;
 use K7Graphic\Factory\BarGraphic;
+use K7Graphic\Factory\GraphValues;
 use K7Graphic\Factory\GraphicFactory;
 use K7Graphic\Factory\LineGraphic;
+use Ballybran\Exception\Exception;
 
 class K7Graphic
 {
@@ -28,13 +31,13 @@ class K7Graphic
 
     private $imgHeight;
     private $imgWidth;
-    private $graphValues = array(0, 80, 23, 11, 190, 245, 50, 80, 111, 240, 55);
+    private $graphValues= array();
     private $filename;
 
 
-    function __construct()
+    function __construct(array $value)
     {
-        $this->graphValues;
+        $this->graphValues = $value;
     }
 
 
@@ -49,7 +52,7 @@ class K7Graphic
     /**
      * @param mixed $imgHeight
      */
-    public function setImgHeight($imgHeight)
+    private function setImgHeight($imgHeight)
     {
         $this->imgHeight = $imgHeight;
     }
@@ -65,7 +68,7 @@ class K7Graphic
     /**
      * @param mixed $imgWidth
      */
-    public function setImgWidth($imgWidth)
+    private function setImgWidth($imgWidth)
     {
         $this->imgWidth = $imgWidth;
     }
@@ -81,46 +84,47 @@ class K7Graphic
 
     }
 
-    public function addValue($type)
+    
+    public function addValue($typeOfTheGraphic)
     {
 
-        $image = imagecreate($this->getImgWidth(), $this->getImgHeight());
+        $image = imagecreate($this->getImgWidth()* (count($this->graphValues) / 39 ), $this->getImgHeight());
         $colorWhite = imagecolorallocate($image, 255, 255, 255);
         $colorGrey = imagecolorallocate($image, 192, 192, 192);
         $colorBlue = imagecolorallocate($image, 0, 0, 255);
+        $red = imagecolorallocate($image, 0xFF, 0x00, 0x00);
+
 
         imageline($image, 0, 0, 0, 250, $colorGrey);
         imageline($image, 0, 0, 250, 0, $colorGrey);
         imageline($image, 249, 0, 249, 249, $colorGrey);
         imageline($image, 0, 249, 249, 249, $colorGrey);
 
-
-        for ($i = 1; $i < 11; $i++) {
+        $data = count($this->graphValues);
+        for ($i = 1; $i < $data + 1; $i++) {
+            // y
             imageline($image, $i * 25, 0, $i * 25, 250, $colorGrey);
-            imageline($image, 0, $i * 25, 250, $i * 25, $colorGrey);
+            // x
+            imageline($image, 1, $i * 25, $data * 25, $i * 25, $colorBlue);
+
         }
 
-        if("line" == $type) {
-            $bar = new GraphicFactory( );
-            $bar->create( new LineGraphic($this->getImgWidth(), $this->getImgHeight(), $image, $colorBlue));
+        if("line" == $typeOfTheGraphic) {
+            $line = new GraphicFactory();
+            $line->create( new LineGraphic($this->graphValues, $this->getImgWidth(), $this->getImgHeight(), $image, $colorBlue, $red));
             $this->output($image);
         }
-        if("bar" == $type) {
-            $bar = new GraphicFactory( );
-            $bar->create( new BarGraphic($this->getImgWidth(), $this->getImgHeight(), $image, $colorBlue));
+        if("bar" == $typeOfTheGraphic ) {
+            $bar = new GraphicFactory();
+            $bar->create( new BarGraphic($this->graphValues, $this->getImgWidth(), $this->getImgHeight(), $image, $colorBlue, $red));
             $this->output($image);
         }
 
         return $this;
     }
 
-
-
-
-
     private function output($image)
     {
-        header("Content-type: image/png");
         imagepng($image, $this->filename);
         imagedestroy($image);
 

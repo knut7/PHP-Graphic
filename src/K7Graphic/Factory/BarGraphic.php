@@ -14,7 +14,7 @@ class BarGraphic implements GraphicInterface
 
     private $imgHeight;
     private $imgWidth;
-    private $graphValues = array(0, 80, 23, 11, 190, 245, 50, 80, 111, 240, 55);
+    private $graphValues;
     /**
      * @var
      */
@@ -24,13 +24,15 @@ class BarGraphic implements GraphicInterface
      */
     private $colorBlue;
 
-    public function __construct($imgWidth, $imgHeight, $image, $colorBlue)
+    public function __construct($graphValues, $imgWidth, $imgHeight, $image, $colorBlue, $textColor)
     {
 
         $this->imgWidth = $imgWidth;
         $this->imgHeight = $imgHeight;
         $this->image = $image;
         $this->colorBlue = $colorBlue;
+        $this->textColor = $textColor;
+        $this->graphValues = $graphValues;
     }
     /**
      * @return mixed
@@ -51,10 +53,17 @@ class BarGraphic implements GraphicInterface
 
     public function graphicLine()
     {
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < count($this->graphValues); $i++) {
 
-            imagefilledrectangle($this->image, $i*25, ($this->getImgWidth() -$this->graphValues[$i]), ($i+1)*25, $this->getImgHeight(), $this->colorBlue);
+            // imagefilledrectangle($this->image, $i*25, ($this->getImgWidth() -$this->graphValues[$i]), ($i+1)*25, $this->getImgHeight(), $this->colorBlue);
             imagefilledrectangle($this->image, ($i*25)+1, (250-$this->graphValues[$i])+1, (($i+1)*25)-5, 248, $this->colorBlue);
+        }
+
+        foreach ($this->graphValues as $i => $value) {
+
+            imagettftext($this->image, 7, 1,  ($i*25)+1, (250-$this->graphValues[$i])+1, $this->textColor, 'Public/fonts/Arial.ttf', "$value %");
+
+           
         }
     }
 }

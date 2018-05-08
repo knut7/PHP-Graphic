@@ -17,8 +17,8 @@ abstract class Creator
 
     public function create($graphic)
     {
-        $graph = $this-$this->makeGraphic($graphic);
-        return $graph;
+        $graph = $this->makeGraphic($graphic);
+         return $graph;
     }
 
 }
