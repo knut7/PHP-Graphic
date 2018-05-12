@@ -17,7 +17,7 @@ Methods
 string
 int
 int
-create($imageName, $with, $height )
+create($imageName, $width, $height )
 
 Methods
 string (bar our line)
