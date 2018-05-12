@@ -20,5 +20,5 @@ int
 create($imageName, $width, $height )
 
 Methods
-string (bar our line)
+string (bar or line)
 addValue($type )
